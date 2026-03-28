@@ -11,8 +11,8 @@ services:
       - GIT_USER=${GIT_USER:-skills-depot}
       - GIT_EMAIL=${GIT_EMAIL:-skills-depot@automated}
       - GIT_TOKEN=${GIT_TOKEN}
-      - VIRTUAL_HOST=skills.neighbornet.ai
-      - LETSENCRYPT_HOST=skills.neighbornet.ai
+      - VIRTUAL_HOST=mcp.axiodev.com
+      - LETSENCRYPT_HOST=mcp.axiodev.com
       - LETSENCRYPT_EMAIL=truck0321@gmail.com
       - VIRTUAL_PORT=3000
     volumes:
