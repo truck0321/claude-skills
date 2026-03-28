@@ -712,19 +712,37 @@ async function main() {
       res.json({ status: "ok", server: "skills-depot", version: "1.0.0" });
     });
 
+    // Track active sessions
+    const sessions = new Map<string, StreamableHTTPServerTransport>();
+
     // MCP endpoint with auth
     app.all("/mcp", async (req, res) => {
       if (!verifyAuth(req, res)) return;
 
+      // Check for existing session
+      const sessionId = req.headers["mcp-session-id"] as string | undefined;
+      if (sessionId && sessions.has(sessionId)) {
+        const transport = sessions.get(sessionId)!;
+        await transport.handleRequest(req, res);
+        return;
+      }
+
+      // New session (initialize request)
       const transport = new StreamableHTTPServerTransport({
         sessionIdGenerator: () => crypto.randomUUID(),
       });
-      // Clean up on close
-      res.on("close", () => {
-        transport.close().catch(() => {});
-      });
+
+      transport.onclose = () => {
+        const sid = (transport as any).sessionId;
+        if (sid) sessions.delete(sid);
+      };
+
       await server.connect(transport);
       await transport.handleRequest(req, res);
+
+      // Store session after first request sets the ID
+      const sid = (transport as any).sessionId;
+      if (sid) sessions.set(sid, transport);
     });
 
     app.listen(PORT, "0.0.0.0", () => {
