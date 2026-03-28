@@ -1,0 +1,11 @@
+server/node_modules
+server/src
+server/tsconfig.json
+.git
+SKILL.md
+sync.sh
+*.md
+!global/**/*.md
+!projects/**/*.md
+!inbox/**/*.md
+!rejected/**/*.md

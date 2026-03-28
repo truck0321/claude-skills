@@ -1,0 +1,28 @@
+services:
+  skills-depot:
+    build: .
+    container_name: skills-depot
+    restart: always
+    environment:
+      - TRANSPORT=http
+      - PORT=3000
+      - SKILLS_DEPOT_TOKEN=${SKILLS_DEPOT_TOKEN}
+      - SKILLS_REPO_URL=${SKILLS_REPO_URL:-https://github.com/truck0321/mcpdepot.git}
+      - GIT_USER=${GIT_USER:-skills-depot}
+      - GIT_EMAIL=${GIT_EMAIL:-skills-depot@automated}
+      - GIT_TOKEN=${GIT_TOKEN}
+      - VIRTUAL_HOST=skills.neighbornet.ai
+      - LETSENCRYPT_HOST=skills.neighbornet.ai
+      - LETSENCRYPT_EMAIL=truck0321@gmail.com
+      - VIRTUAL_PORT=3000
+    volumes:
+      - skills-repo:/root/.skills-depot
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true
+
+volumes:
+  skills-repo:
