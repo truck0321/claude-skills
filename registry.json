@@ -1,0 +1,15 @@
+{
+  "version": "1.0",
+  "description": "Skills registry - tracks all skills, their source, and review status",
+  "skills": {
+    "mealie": {
+      "source": "local/existing",
+      "description": "Look up today's meal plan from Mealie",
+      "importedAt": "2026-03-28",
+      "approvedAt": "2026-03-28",
+      "status": "approved"
+    }
+  },
+  "inbox": {},
+  "rejected": {}
+}
