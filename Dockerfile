@@ -1,6 +1,6 @@
-FROM node:22-alpine
+FROM node:22-slim
 
-RUN apk add --no-cache git
+RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates curl && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
@@ -22,6 +22,6 @@ ENV PORT=3000
 EXPOSE 3000
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-  CMD wget -qO- http://localhost:3000/health || exit 1
+  CMD curl -sf http://localhost:3000/health || exit 1
 
 CMD ["node", "server/dist/index.js"]
