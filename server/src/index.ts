@@ -700,11 +700,6 @@ async function main() {
   console.error(`Skills repo ready at ${REPO_LOCAL}`);
 
   if (TRANSPORT === "http") {
-    if (!AUTH_TOKEN) {
-      console.error("FATAL: SKILLS_DEPOT_TOKEN must be set for HTTP transport");
-      process.exit(1);
-    }
-
     const app = express();
 
     // Health check (no auth required)
@@ -715,9 +710,8 @@ async function main() {
     // Track active sessions
     const sessions = new Map<string, StreamableHTTPServerTransport>();
 
-    // MCP endpoint with auth
+    // MCP endpoint
     app.all("/mcp", async (req, res) => {
-      if (!verifyAuth(req, res)) return;
 
       // Check for existing session
       const sessionId = req.headers["mcp-session-id"] as string | undefined;
