@@ -1,11 +1,6 @@
 server/node_modules
-server/src
-server/tsconfig.json
+server/dist
 .git
-SKILL.md
+.claude
+.env
 sync.sh
-*.md
-!global/**/*.md
-!projects/**/*.md
-!inbox/**/*.md
-!rejected/**/*.md

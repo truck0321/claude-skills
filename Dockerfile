@@ -4,12 +4,14 @@ RUN apk add --no-cache git
 
 WORKDIR /app
 
-# Copy server package files and install
+# Copy server package files and install (including devDeps for build)
 COPY server/package.json server/package-lock.json ./server/
-RUN cd server && npm ci --omit=dev
+RUN cd server && npm ci
 
-# Copy built server
-COPY server/dist ./server/dist
+# Copy source and build
+COPY server/src ./server/src
+COPY server/tsconfig.json ./server/
+RUN cd server && npm run build && npm prune --omit=dev
 
 # Copy the management skill
 COPY SKILL.md ./
