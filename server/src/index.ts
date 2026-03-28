@@ -274,8 +274,9 @@ function today(): string {
   return new Date().toISOString().split("T")[0];
 }
 
-// --- MCP Server ---
+// --- MCP Server Factory ---
 
+function createServer(): McpServer {
 const server = new McpServer({
   name: "skills-depot",
   version: "1.0.0",
@@ -664,6 +665,9 @@ server.tool(
   }
 );
 
+return server;
+}
+
 // --- Auth Middleware ---
 
 function verifyAuth(req: express.Request, res: express.Response): boolean {
@@ -731,7 +735,8 @@ async function main() {
         if (sid) sessions.delete(sid);
       };
 
-      await server.connect(transport);
+      const sessionServer = createServer();
+      await sessionServer.connect(transport);
       await transport.handleRequest(req, res);
 
       // Store session after first request sets the ID
@@ -745,7 +750,7 @@ async function main() {
   } else {
     // stdio mode (local use)
     const transport = new StdioServerTransport();
-    await server.connect(transport);
+    await createServer().connect(transport);
   }
 }
 
