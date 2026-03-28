@@ -706,7 +706,6 @@ async function main() {
     }
 
     const app = express();
-    app.use(express.json());
 
     // Health check (no auth required)
     app.get("/health", (_req, res) => {
