@@ -714,8 +714,15 @@ async function main() {
     // Track active sessions
     const sessions = new Map<string, StreamableHTTPServerTransport>();
 
-    // MCP endpoint
+    // MCP endpoint with Bearer auth
     app.all("/mcp", async (req, res) => {
+      if (AUTH_TOKEN) {
+        const auth = req.headers.authorization;
+        if (auth !== `Bearer ${AUTH_TOKEN}`) {
+          res.status(401).json({ error: "Unauthorized" });
+          return;
+        }
+      }
 
       // Check for existing session
       const sessionId = req.headers["mcp-session-id"] as string | undefined;
